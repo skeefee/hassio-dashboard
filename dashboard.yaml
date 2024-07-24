@@ -1,0 +1,883 @@
+decluttering_templates:
+  iconBadge:
+    card:
+      type: custom:mushroom-template-card
+      primary: ''
+      secondary: ''
+      icon: |
+        {{ states['[[entity]]'].attributes.icon }} 
+      badge_icon: |
+        {% if states['[[entity]]'].state != '0' %}
+          mdi:numeric-{{ states['[[entity]]'].state }}
+        {% endif %}
+      badge_color: red
+      fill_container: false
+      tap_action:
+        action: navigate
+        navigation_path: '[[navigate]]'
+      hold_action:
+        action: none
+      double_tap_action:
+        action: none
+      card_mod:
+        style: |
+          :host {
+            --ha-card-background:transparent;
+            --ha-card-border-width: 0;
+            --spacing: 0 !important;
+          }
+          * {
+            transition: none !important;
+            --icon-size: 50px !important;
+            --badge-size: 25px !important;
+            --shape-color: rgba(0,0,0,0.3) !important;
+            --icon-color: #fff !important;
+            {% if states['[[entity]]'].state != '0' %}
+              --shape-color: #fff !important;
+              --icon-color: #000 !important;
+            {% endif %}
+          }
+          mushroom-badge-icon {
+            --icon-primary-color: #fff !important;
+          }
+  menu:
+    default:
+      - active: media
+    card:
+      type: vertical-stack
+      cards:
+        - type: custom:gap-card
+        - type: custom:layout-card
+          layout_type: custom:grid-layout
+          cards:
+            - type: horizontal-stack
+              cards: []
+              card_mod:
+                style: |
+                  * {
+                    --layout-margin: 0 !important;
+                    display: none !important;
+                  }
+            - type: custom:decluttering-card
+              template: iconBadge
+              variables:
+                - entity: sensor.lights_on_count
+                - navigate: /lovelace/home
+            - type: custom:decluttering-card
+              template: iconBadge
+              variables:
+                - entity: sensor.opened_windows_count
+                - navigate: /lovelace/security
+            - type: custom:decluttering-card
+              template: iconBadge
+              variables:
+                - entity: sensor.tv_s_turned_on_count
+                - navigate: /lovelace/media
+            - type: horizontal-stack
+              cards: []
+              card_mod:
+                style: |
+                  * {
+                    --layout-margin: 0 !important;
+                    display: none !important;
+                  }
+          layout:
+            grid-template-columns: auto 60px 60px 60px auto
+        - type: custom:mushroom-chips-card
+          chips:
+            - type: template
+              double_tap_action:
+                action: none
+              icon: mdi:home-outline
+              content: Home
+              tap_action:
+                action: navigate
+                navigation_path: /lovelace/home
+              card_mod:
+                style: |
+                  :host {
+                    --chip-font-size: 16px;
+                    --chip-icon-size: 28px;
+                    --chip-border-radius: 0.65rem;
+                    {% if '[[active]]' == 'home' %}
+                    --chip-background: #fff  !important;
+                    --primary-text-color: #000 !important;
+                    {% endif %}
+                  }
+                  * {
+                    transition: none !important;
+                  }
+            - type: template
+              double_tap_action:
+                action: none
+              icon: mdi:thermometer
+              content: Climate
+              tap_action:
+                action: navigate
+                navigation_path: /lovelace/climate
+              card_mod:
+                style: |
+                  :host {
+                    --chip-font-size: 16px;
+                    --chip-icon-size: 28px;
+                    --chip-border-radius: 0.65rem;
+                    {% if '[[active]]' == 'climate' %}
+                    --chip-background: #fff  !important;
+                    --primary-text-color: #000 !important;
+                    {% endif %}
+                  }
+                  * {
+                    transition: none !important;
+                  }
+            - type: template
+              double_tap_action:
+                action: none
+              icon: mdi:television-classic
+              content: Media
+              tap_action:
+                action: navigate
+                navigation_path: /lovelace/media
+              card_mod:
+                style: |
+                  :host {
+                    --chip-font-size: 16px;
+                    --chip-icon-size: 28px;
+                    --chip-border-radius: 0.65rem;
+                    {% if '[[active]]' == 'media' %}
+                    --chip-background: #fff  !important;
+                    --primary-text-color: #000 !important;
+                    {% endif %}
+                  }
+                  * {
+                    transition: none !important;
+                  }
+            - type: template
+              double_tap_action:
+                action: none
+              icon: mdi:shield-check-outline
+              content: Security
+              tap_action:
+                action: navigate
+                navigation_path: /lovelace/security
+              card_mod:
+                style: |
+                  :host {
+                    --chip-font-size: 16px;
+                    --chip-icon-size: 28px;
+                    --chip-border-radius: 0.65rem;
+                    {% if '[[active]]' == 'security' %}
+                    --chip-background: #fff  !important;
+                    --primary-text-color: #000 !important;
+                    {% endif %}
+                  }
+                  * {
+
+                    transition: none !important;
+                  }
+          card_mod:
+            style: |
+              * {
+                transition: none !important;
+              }
+              :host {
+                --chip-border-width: 0px !important;
+                width: 100%;
+                --chip-height: 46px !important;
+                --chip-background: rgba(0, 0, 0, 0.3) !important;
+                --primary-text-color: #fff !important;
+              }
+
+              .chip-container  > * {
+                width: 100%;
+                margin-right: 0 !important;
+              }
+              @media screen and (max-width: 1020px){
+                .chip-container {
+                  gap: 0.25rem;
+                }
+                .chip-container  > * {
+                  width: calc(50% - 0.25rem);
+                }
+              }
+  title:
+    default:
+      - color: rgb(255,255,255)
+      - display: block
+    card:
+      type: custom:mushroom-title-card
+      title: '[[title]]'
+      card_mod:
+        style: |
+          :host {
+            --title-color: [[color]] !important;
+            --title-font-size: 28px !important;
+            --title-font-weight: bold !important;
+            {% if '[[color]]' == 'transparent' %}
+              --title-color: red !important;
+              --title-font-size: 0px !important;
+              --title-padding: 0 0 30px 0 !important;
+              --title-line-height: 0 !important;
+            {% endif  %}
+          }
+          @media screen and (max-width: 1020px){
+             :host {
+               display: [[display]];
+             }
+          }
+  camera:
+    card:
+      type: custom:webrtc-camera
+      url: '[[url]]'
+      ui: false
+      background: true
+      mode: mse
+      card_mod:
+        style: |
+          :host {
+            display: block;
+            box-sizing: border-box;
+            padding:0 8px;
+            --ha-card-border-width: 0 !important;
+            --ha-card-border-radius: 8px !important;
+          } video {
+            border-radius: 8px !important;
+          }
+          .header {
+            display: none !important;
+          }
+          .controls {
+            --mdc-icon-size: 50px !important;
+          }
+
+          .controls > * {
+            display: none;
+          }
+
+          .controls .fullscreen, .controls .pictureinpicture, .controls .volume
+          {
+            display: block;
+          }
+
+          .controls .volume {
+            margin: 0 0 0 auto;
+          }
+  iosButton:
+    default:
+      - primary: Entity name
+      - secondary: Secondary info
+      - icon: mdi:fire
+      - badge_icon: ''
+      - tap_action: none
+      - hold_action: none
+      - icon_color: '#ffae00'
+    card:
+      type: custom:mushroom-template-card
+      primary: '[[primary]]'
+      secondary: '[[secondary]]'
+      icon: '[[icon]]'
+      badge_icon: '[[badge_icon]]'
+      entity: '[[entity]]'
+      tap_action:
+        action: '[[tap_action]]'
+      hold_action:
+        action: '[[hold_action]]'
+      card_mod:
+        style: |
+          * {
+            transition: none !important;
+            --card-primary-font-size: 16px;
+            --card-secondary-font-size: 16px;
+            --card-secondary-color: rgb(200,200,200);
+            --shape-color: rgba(0,0,0,0.3) !important;
+            --icon-color: #c8c8c8;
+            --main-color: DimGray;
+            {% if states['[[entity]]'].state != 'off' %}
+              --shape-color: [[icon_color]] !important;
+              --icon-color: #fff !important;
+              --card-secondary-color: DimGray;
+            {% endif %}
+            
+          }
+
+          :host {
+            --ha-card-border-radius: 8px;
+            --ha-card-background: rgba(0,0,0,0.3);
+            --primary-text-color: #fff;
+            --ha-card-border-width: 0px;
+            {% if states['[[entity]]'].state != 'off' %}
+              --ha-card-background: #fff !important;
+              --primary-text-color: #000;
+            {% endif %}
+          }
+views:
+  - title: Home
+    icon: mdi:home-outline
+    path: home
+    theme: iOS Theme
+    background: center / cover no-repeat fixed url('/local/godis_background.webp')
+    type: custom:ha-dashboard
+    layout:
+      grid-template-columns: 240px repeat(auto-fill, minmax(360px, auto))
+      mediaquery:
+        '(max-width: 1020px)':
+          grid-template-columns: repeat(auto-fill, minmax(100%, auto))
+    card_mod:
+      style: |
+        :host {
+          --ha-card-background: rgba(0,0,0,0.2);
+        }
+        * {
+          transition: none !important;
+        }
+        .sidebar {
+          --sidebar-min-width: 260px !important;
+          --sidebar-max-width: 260px !important;
+
+          margin: 0 !important;
+          border-right: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 0;
+          padding:0 2rem;
+        }
+    sidebar:
+      cards:
+        - type: custom:decluttering-card
+          template: menu
+          variables:
+            - active: home
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: title
+                variables:
+                  - title: Cameras
+              - show_state: true
+                show_name: true
+                camera_view: auto
+                type: picture-entity
+                entity: camera.192_168_2_72
+                name: Aron's camera
+                tap_action:
+                  action: more-info
+                hold_action:
+                  action: none
+                card_mod:
+                  style: |
+                    :host {
+                      --ha-card-border-radius: 8px;
+                      --ha-card-border-width: 0px;
+                      --ha-card-background: rgba(0,0,0,0.3);
+                    }
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Automations
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              exclude:
+                - attributes:
+                    icon: mdi:cancel
+              include:
+                - entity_id: script.*
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Light', '') }}
+                      - secondary: ''
+                      - icon: '{{ states[''this.entity_id''].attributes.icon}}'
+                      - entity: this.entity_id
+                      - tap_action: toggle
+            sort:
+              method: entity_id
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Lights
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: light.*_light
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Light', '') }}
+                      - secondary: '{{ states[''this.entity_id''].state | capitalize }}'
+                      - icon: mdi:lightbulb
+                      - entity: this.entity_id
+                      - tap_action: toggle
+            sort:
+              method: entity_id
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: LED strips
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: light.*_led
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' LED', '') }}
+                      - secondary: '{{ states[''this.entity_id''].state | capitalize }}'
+                      - icon: mdi:led-strip-variant
+                      - entity: this.entity_id
+                      - tap_action: toggle
+                      - hold_action: more-info
+            sort:
+              method: entity_id
+      - type: custom:popup-card
+        entity: camera.192_168_2_72
+        size: fullscreen
+        card:
+          type: custom:decluttering-card
+          template: camera
+          variables:
+            - url: camera.aron
+        title: Aron's camera
+        dismissable: true
+  - title: Climate
+    path: climate
+    theme: iOS Theme
+    background: center / cover no-repeat fixed url('/local/godis_background.webp')
+    type: custom:ha-dashboard
+    layout:
+      grid-template-columns: repeat(auto-fill, minmax(360px, auto))
+      mediaquery:
+        '(max-width: 1020px)':
+          grid-template-columns: repeat(auto-fill, minmax(100%, auto))
+    badges: []
+    card_mod:
+      style: |
+        :host {
+          --ha-card-background: rgba(0,0,0,0.2);
+        }
+        * {
+          transition: none !important;
+        }
+        .sidebar {
+          --sidebar-min-width: 260px !important;
+          --sidebar-max-width: 260px !important;
+
+          margin: 0 !important;
+          border-right: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 0;
+          padding:0 2rem;
+        }
+        .column {
+          max-width: 100% !important;
+        }
+    sidebar:
+      cards:
+        - type: custom:decluttering-card
+          template: menu
+          variables:
+            - active: climate
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Thermostats
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: climate.*
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Thermostat', '') }}
+                      - secondary: >-
+                          {{ states['this.entity_id'].state | capitalize }} - {{
+                          states['this.entity_id'].attributes.temperature }}°C
+                      - icon: mdi:thermostat
+                      - entity: this.entity_id
+                      - tap_action: more-info
+            sort:
+              method: entity_id
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Humidity
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: sensor.*humidity
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Sensor Humidity', '') }}
+                      - secondary: '{{ states[''this.entity_id''].state | capitalize }}%'
+                      - icon: mdi:water
+                      - entity: this.entity_id
+                      - icon_color: rgb(75 209 237)
+            sort:
+              method: entity_id
+  - title: Media
+    path: media
+    theme: iOS Theme
+    background: center / cover no-repeat fixed url('/local/godis_background.webp')
+    type: custom:ha-dashboard
+    icon: ''
+    layout:
+      grid-template-columns: 240px repeat(auto-fill, minmax(360px, auto))
+      mediaquery:
+        '(max-width: 1020px)':
+          grid-template-columns: repeat(auto-fill, minmax(100%, auto))
+    badges: []
+    card_mod:
+      style: |
+        :host {
+          --ha-card-background: rgba(0,0,0,0.2);
+        }
+        * {
+          transition: none !important;
+        }
+        .sidebar {
+          --sidebar-min-width: 260px !important;
+          --sidebar-max-width: 260px !important;
+
+          margin: 0 !important;
+          border-right: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 0;
+          padding:0 2rem;
+        }
+    sidebar:
+      cards:
+        - type: custom:decluttering-card
+          template: menu
+          variables:
+            - active: media
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: TV's
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: media_player.*chromecast*
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Android TV', '') }}
+                      - secondary: '{{ states[''this.entity_id''].state | capitalize }}'
+                      - icon: mdi:monitor
+                      - entity: this.entity_id
+                      - tap_action: more-info
+            sort:
+              method: entity_id
+      - type: vertical-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: title
+                variables:
+                  - title: Speakers
+              - type: custom:auto-entities
+                card:
+                  show_empty: false
+                  type: custom:layout-card
+                  layout_type: custom:grid-layout
+                  layout:
+                    grid-template-columns: minmax(auto, 100%)
+                card_param: cards
+                filter:
+                  include:
+                    - entity_id: media_player.*_speaker
+                      options:
+                        type: custom:decluttering-card
+                        template: iosButton
+                        variables:
+                          - primary: >-
+                              {{
+                              states['this.entity_id'].attributes.friendly_name
+                              | replace(' speaker', '') }}
+                          - secondary: >-
+                              {% if states['this.entity_id'].state != 'off' %}
+                              {{ states['this.entity_id'].attributes.media_title
+                              }} - {{
+                              states['this.entity_id'].attributes.media_artist
+                              }} {% else %} Off {% endif %}
+                          - icon: mdi:speaker
+                          - entity: this.entity_id
+                          - tap_action: more-info
+                sort:
+                  method: state
+                  reverse: true
+                  numeric: false
+                  ip: false
+      - type: custom:popup-card
+        entity: media_player.chromecast
+        size: fullscreen
+        card:
+          type: custom:firemote-card
+          entity: media_player.bedroom_adb
+          device_family: chromecast
+          device_type: chromecast-4k
+          compatibility_mode: default
+          android_tv_remote_entity: remote.chromecast
+          scale: '100'
+          defaultRemoteStyle_override: ''
+          app_launch_1: ''
+          app_launch_2: plex
+          app_launch_3: go3-estonia
+          app_launch_4: customlauncher tinycam
+          name_position: bottom
+          visible_name_text: Bedroom TV
+          custom_launchers:
+            - friendly_name: tinycam
+              icon: mdi:camera
+              name: Camera
+              service: androidtv.adb_command
+              background: '#2c7dff'
+              color: white
+              target:
+                entity_id: media_player.bedroom_adb
+              data:
+                command: >-
+                  am start -a android.intent.action.VIEW -d -n
+                  com.alexvas.dvr.pro
+          button_overrides:
+            input-button:
+              hidden: true
+            mute-button:
+              script: bedroom_tv_toggle_mute
+            volume-down-button:
+              script: bedroom_tv_volume_down
+            volume-up-button:
+              script: bedroom_tv_volume_up
+        title: Bedroom TV
+        dismissable: true
+        card_mod:
+          style: |
+            * {
+              user-select: none !important;
+            }
+      - type: custom:popup-card
+        entity: media_player.chromecast_2
+        size: fullscreen
+        card:
+          type: custom:firemote-card
+          entity: media_player.living_room_adb
+          device_family: chromecast
+          device_type: chromecast-4k
+          compatibility_mode: default
+          android_tv_remote_entity: remote.chromecast_2
+          scale: '100'
+          defaultRemoteStyle_override: ''
+          app_launch_1: ''
+          app_launch_2: plex
+          app_launch_3: go3-estonia
+          app_launch_4: customlauncher tinycam
+          name_position: bottom
+          visible_name_text: Living room TV
+          custom_launchers:
+            - friendly_name: tinycam
+              icon: mdi:camera
+              name: Camera
+              service: androidtv.adb_command
+              background: '#2c7dff'
+              color: white
+              target:
+                entity_id: media_player.living_room_adb
+              data:
+                command: >-
+                  am start -a android.intent.action.VIEW -d -n
+                  com.alexvas.dvr.pro
+          button_overrides:
+            input-button:
+              script: living_room_tv_toggle_source
+            mute-button:
+              script: living_room_tv_toggle_mute
+            volume-down-button:
+              script: living_room_tv_volume_down
+            volume-up-button:
+              script: living_room_tv_volume_up
+        title: Living room
+        dismissable: true
+        card_mod:
+          style: |
+            * {
+              user-select: none !important;
+            }
+  - title: Security
+    path: security
+    theme: iOS Theme
+    background: center / cover no-repeat fixed url('/local/godis_background.webp')
+    type: custom:ha-dashboard
+    icon: ''
+    layout:
+      grid-template-columns: 240px repeat(auto-fill, minmax(360px, auto))
+      mediaquery:
+        '(max-width: 1020px)':
+          grid-template-columns: repeat(auto-fill, minmax(100%, auto))
+    badges: []
+    card_mod:
+      style: |
+        :host {
+          --ha-card-background: rgba(0,0,0,0.2);
+        }
+        * {
+          transition: none !important;
+        }
+        .sidebar {
+          --sidebar-min-width: 260px !important;
+          --sidebar-max-width: 260px !important;
+
+          margin: 0 !important;
+          border-right: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 0;
+          padding:0 2rem;
+        }
+    sidebar:
+      cards:
+        - type: custom:decluttering-card
+          template: menu
+          variables:
+            - active: security
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Devices
+          - show_empty: false
+            type: custom:layout-card
+            layout_type: custom:grid-layout
+            layout:
+              grid-template-columns: repeat(2,minmax(185px,225px))
+            cards:
+              - type: custom:decluttering-card
+                template: iosButton
+                variables:
+                  - primary: Smoke detector
+                  - secondary: null
+                  - icon: mdi:smoke-detector
+                  - entity: binary_sensor.entrance_smoke_detector_smoke
+                  - tap_action: more-info
+              - type: custom:decluttering-card
+                template: iosButton
+                variables:
+                  - primary: Roborock S7
+                  - secondary: null
+                  - icon: mdi:robot-vacuum
+                  - entity: vacuum.roborock_s7
+                  - tap_action: more-info
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: title
+            variables:
+              - title: Windows
+          - type: custom:auto-entities
+            card:
+              show_empty: false
+              type: custom:layout-card
+              layout_type: custom:grid-layout
+              layout:
+                grid-template-columns: repeat(2,minmax(185px,225px))
+            card_param: cards
+            filter:
+              include:
+                - entity_id: binary_sensor.*_contact
+                  options:
+                    type: custom:decluttering-card
+                    template: iosButton
+                    variables:
+                      - primary: >-
+                          {{ states['this.entity_id'].attributes.friendly_name |
+                          replace(' Window', '') }}
+                      - secondary: >-
+                          {% if states['this.entity_id'].state == 'off' %}Closed
+                          {% else %}Open{% endif %}
+                      - icon: mdi:window-closed-variant
+                      - entity: this.entity_id
+            sort:
+              method: entity_id
+      - type: custom:popup-card
+        entity: vacuum.roborock_s7
+        size: normal
+        card:
+          type: custom:xiaomi-vacuum-map-card
+          entity: vacuum.roborock_s7
+          vacuum_platform: humbertogontijo/homeassistant-roborock
+          map_source:
+            camera: camera.xiaomi_cloud_map_extractor
+          map_locked: false
+          calibration_source:
+            camera: true
+        title: Roborock S7
+        dismissable: true
